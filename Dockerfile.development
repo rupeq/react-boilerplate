@@ -12,9 +12,18 @@ RUN pnpm install --frozen-lockfile
 # Stage 2
 FROM base AS development
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && \
+	apt-get install -y curl && \
+	rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m devuser
 
 COPY . .
+
+RUN mkdir /app/node_modules/.vite && \
+	chown -R devuser:devuser /app/node_modules/.vite
+
+USER devuser
 
 EXPOSE 3000
 
