@@ -193,7 +193,7 @@ const eslintConfig = typescriptEslint.config(
 );
 
 eslintConfig.map((config) => {
-	config.files = ["src/**/*.ts", "src/**/*.tsx", "e2e/**/*.tsx"];
+	config.files = ["src/**/*.ts", "src/**/*.tsx", "e2e/**/*.ts"];
 });
 
 export default eslintConfig;
