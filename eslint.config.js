@@ -58,6 +58,36 @@ const typescriptConfig = {
 		import: patchedImportPlugin,
 	},
 	rules: {
+		"import/order": [
+			"error",
+			{
+				groups: [
+					["builtin"],
+					["external"],
+					["internal", "index"],
+					["parent", "sibling"],
+					["unknown"],
+				],
+				pathGroups: [
+					{
+						pattern: "@/**",
+						group: "internal",
+						position: "before",
+					},
+					{
+						pattern: "**/*.css",
+						group: "sibling",
+						position: "after",
+					},
+				],
+				pathGroupsExcludedImportTypes: ["builtin"],
+				"newlines-between": "always",
+				alphabetize: {
+					order: "asc",
+					caseInsensitive: true,
+				},
+			},
+		],
 		"@typescript-eslint/adjacent-overload-signatures": "error",
 		"@typescript-eslint/array-type": ["error", { default: "generic" }],
 		"@typescript-eslint/consistent-type-exports": "error",

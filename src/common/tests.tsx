@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { I18nextProvider } from "react-i18next";
 import { render as rtlRender } from "@testing-library/react";
 import type { ReactElement, PropsWithChildren, FC } from "react";
+import { I18nextProvider } from "react-i18next";
 
 import { init } from "@/i18n/tests";
 

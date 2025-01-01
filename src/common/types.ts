@@ -1,5 +1,5 @@
-import type { FC } from "react";
 import type { render } from "@testing-library/react";
+import type { FC } from "react";
 
 import type { defaults } from "./tests";
 
