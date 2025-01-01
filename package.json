@@ -17,7 +17,7 @@
 		]
 	},
 	"scripts": {
-		"setup": "git init && npx husky init && npx playwright install && shx rm .husky/pre-commit",
+		"setup": "pnpm install && git init && npx husky && npx playwright install",
 		"prepare": "husky",
 		"husky": "node ./node_modules/husky/bin.js",
 		"lint": "eslint --max-warnings 0",
@@ -79,7 +79,6 @@
 		"postcss-preset-env": "^10.1.3",
 		"prettier": "^3.4.2",
 		"prop-types": "^15.8.1",
-		"shx": "^0.3.4",
 		"stylelint": "^16.12.0",
 		"stylelint-config-standard": "^36.0.1",
 		"stylelint-order": "^6.0.4",
