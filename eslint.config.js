@@ -1,8 +1,8 @@
-import { fixupPluginRules } from "@eslint/compat";
 import eslintJS from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
-import eslintPluginImport from "eslint-plugin-import";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import eslintPluginImport from "eslint-plugin-import-x";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 import eslintPluginReact from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
@@ -11,10 +11,12 @@ import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
 
-const patchedReactHooksPlugin = fixupPluginRules(eslintPluginReactHooks);
-const patchedImportPlugin = fixupPluginRules(eslintPluginImport);
+const prettierConfig = {
+	...eslintConfigPrettier,
+	name: "prettier",
+};
 
-const baseESLintConfig = {
+const javascriptConfig = {
 	name: "eslint",
 	extends: [eslintJS.configs.recommended],
 	rules: {
@@ -31,7 +33,7 @@ const baseESLintConfig = {
 		"no-use-before-define": "error",
 		"require-atomic-updates": "error",
 		"no-console": "warn",
-		camelcase: "error",
+		"camelcase": "error",
 	},
 };
 
@@ -54,40 +56,7 @@ const typescriptConfig = {
 	linterOptions: {
 		reportUnusedDisableDirectives: "error",
 	},
-	plugins: {
-		import: patchedImportPlugin,
-	},
 	rules: {
-		"import/order": [
-			"error",
-			{
-				groups: [
-					["builtin"],
-					["external"],
-					["internal", "index"],
-					["parent", "sibling"],
-					["unknown"],
-				],
-				pathGroups: [
-					{
-						pattern: "@/**",
-						group: "internal",
-						position: "before",
-					},
-					{
-						pattern: "**/*.css",
-						group: "sibling",
-						position: "after",
-					},
-				],
-				pathGroupsExcludedImportTypes: ["builtin"],
-				"newlines-between": "always",
-				alphabetize: {
-					order: "asc",
-					caseInsensitive: true,
-				},
-			},
-		],
 		"@typescript-eslint/adjacent-overload-signatures": "error",
 		"@typescript-eslint/array-type": ["error", { default: "generic" }],
 		"@typescript-eslint/consistent-type-exports": "error",
@@ -102,7 +71,6 @@ const typescriptConfig = {
 		"@typescript-eslint/no-useless-empty-export": "error",
 		"@typescript-eslint/prefer-enum-initializers": "error",
 		"@typescript-eslint/prefer-readonly": "error",
-		"no-return-await": "off",
 		"@typescript-eslint/return-await": "error",
 		"@typescript-eslint/no-misused-promises": [
 			"error",
@@ -112,26 +80,20 @@ const typescriptConfig = {
 				},
 			},
 		],
-	},
-	settings: {
-		"import/resolver": {
-			typescript: {
-				alwaysTryTypes: true,
-				project: "./tsconfig.json",
-			},
-		},
+		"no-return-await": "off",
 	},
 };
 
 const reactConfig = {
 	name: "react",
-	extends: [eslintPluginReact.configs.flat["jsx-runtime"]],
+	extends: [eslintPluginReact.configs.flat?.["recommended"]].filter(Boolean),
 	plugins: {
-		"react-hooks": patchedReactHooksPlugin,
+		"react-hooks": eslintPluginReactHooks,
 		"react-refresh": eslintPluginReactRefresh,
 	},
 	rules: {
-		"import/no-anonymous-default-export": "error",
+		...eslintPluginReactHooks.configs.recommended.rules,
+		...eslintPluginReactRefresh.configs.recommended.rules,
 		"react/jsx-boolean-value": "error",
 		"react/jsx-filename-extension": [
 			2,
@@ -152,21 +114,33 @@ const reactConfig = {
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
 		"react-hooks/exhaustive-deps": "error",
-		...patchedReactHooksPlugin.configs.recommended.rules,
 		"react-refresh/only-export-components": [
 			"warn",
 			{ allowConstantExport: true },
 		],
 	},
+	settings: {
+		react: {
+			version: "detect",
+		},
+	},
 };
 
 const jsxA11yConfig = {
-	name: "jsxA11y",
 	...jsxA11yPlugin.flatConfigs.recommended,
+	name: "jsxA11y",
 	plugins: {
 		"jsx-a11y": jsxA11yPlugin,
 	},
+	languageOptions: {
+		...jsxA11yPlugin.flatConfigs.recommended.languageOptions,
+		globals: {
+			...globals.serviceworker,
+			...globals.browser,
+		},
+	},
 	rules: {
+		...jsxA11yPlugin.flatConfigs.recommended.rules,
 		"jsx-a11y/alt-text": ["error", { elements: ["img"], img: ["Image"] }],
 		"jsx-a11y/aria-props": "error",
 		"jsx-a11y/aria-proptypes": "error",
@@ -182,6 +156,7 @@ const unicornConfig = {
 		unicorn: eslintPluginUnicorn,
 	},
 	rules: {
+		...eslintPluginUnicorn.configs["flat/recommended"].rules,
 		"unicorn/custom-error-definition": "error",
 		"unicorn/empty-brace-spaces": "error",
 		"unicorn/no-array-for-each": "off",
@@ -213,17 +188,53 @@ const unicornConfig = {
 	},
 };
 
+const importPlugin = {
+	name: "import-x",
+	plugins: {
+		"import-x": eslintPluginImport,
+	},
+	settings: {
+		"import-x/resolver-next": [
+			createTypeScriptImportResolver({
+				alwaysTryTypes: true,
+				project: "./tsconfig.json",
+			}),
+		],
+		"import-x/ignore": [
+			".*/node_modules",
+			"\\.(scss|css)$",
+			"\\.(png|jpe?g|svg)",
+		],
+		"import-x/extensions": [".js", ".jsx", ".ts", ".tsx"],
+	},
+	rules: {
+		...eslintPluginImport.flatConfigs.recommended.rules,
+		"import-x/no-cycle": "error",
+		"import-x/no-anonymous-default-export": "error",
+	},
+};
+
 const eslintConfig = typescriptEslint.config(
-	baseESLintConfig,
+	javascriptConfig,
 	typescriptConfig,
-	eslintConfigPrettier,
 	reactConfig,
 	jsxA11yConfig,
-	unicornConfig
+	unicornConfig,
+	importPlugin,
+	prettierConfig,
 );
 
 eslintConfig.map((config) => {
 	config.files = ["src/**/*.ts", "src/**/*.tsx", "e2e/**/*.ts"];
+	config.ignores = [
+		"build/**/*",
+		"dist/**/*",
+		"node_modules/**/*",
+		".husky/**/*",
+		"test-results/**/*",
+		"playwright-report/**/*",
+		".vitest-preview/**/*",
+	];
 });
 
 export default eslintConfig;

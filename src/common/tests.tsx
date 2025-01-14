@@ -1,47 +1,60 @@
 /* eslint-disable react-refresh/only-export-components */
 import { render as rtlRender } from "@testing-library/react";
-import type { ReactElement, PropsWithChildren, FC } from "react";
 import { I18nextProvider } from "react-i18next";
 
 import { init } from "@/i18n/tests";
 
-import type { RenderType } from "./types";
+import type { RenderType, WrapperType } from "./types";
 
 export const defaults = {
 	withI18n: true,
 };
 
-const I18nWrapper = ({ children }: PropsWithChildren): ReactElement => {
+const DefaultWrapper: WrapperType = ({ children }) => {
+	return <>{children}</>;
+};
+
+const I18nWrapper: WrapperType = ({ children }) => {
 	const i18n = init();
 	return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 
 const render = <P extends object>({
-	parameters = defaults,
+	parameters = {} as typeof defaults,
 	options = {},
 	ui,
 	props = {} as P,
 }: RenderType<P>): ReturnType<typeof rtlRender> => {
+	const rtlRenderParameters: typeof defaults = { ...defaults, ...parameters };
+
 	const Component = ui;
-	const wrappers: Array<FC<PropsWithChildren>> = [];
+	const wrappers: Array<WrapperType> = [];
 
 	if (options.wrapper) {
-		wrappers.push(options.wrapper as never);
+		wrappers.push(options.wrapper);
 	}
 
-	if (parameters.withI18n) {
+	if (rtlRenderParameters.withI18n) {
 		wrappers.push(I18nWrapper);
 	}
 
 	const Wrapper = wrappers.reduce(
-		(accumulator, WrapperComponent) =>
-			({ children }: PropsWithChildren): ReactElement => (
-				<WrapperComponent>{accumulator({ children })}</WrapperComponent>
-			),
-		({ children }: PropsWithChildren) => <>{children}</>
+		(Accumulator, WrapperComponent, cid): WrapperType => {
+			const wrapper: WrapperType = ({ children }) => (
+				<WrapperComponent>
+					<Accumulator>{children}</Accumulator>
+				</WrapperComponent>
+			);
+			wrapper.displayName = `__Wrapper__${cid}`;
+			return wrapper;
+		},
+		DefaultWrapper,
 	);
 
-	return rtlRender(<Component {...props} />, { ...options, wrapper: Wrapper });
+	return rtlRender(<Component {...props} />, {
+		...rtlRenderParameters,
+		wrapper: Wrapper,
+	});
 };
 
 export default render;

@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import react from "@vitejs/plugin-react-swc";
-import { normalizePath, defineConfig, type ConfigEnv } from "vite";
+import { type ConfigEnv, defineConfig, normalizePath } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default (env: ConfigEnv) => {
@@ -39,6 +39,10 @@ export default (env: ConfigEnv) => {
 				localsConvention: "camelCase",
 				generateScopedName,
 			},
+		},
+		build: {
+			minify: true,
+			cssCodeSplit: true,
 		},
 	});
 };

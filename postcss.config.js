@@ -1,12 +1,15 @@
+import cssnanoPlugin from "cssnano";
+import postCSSPresetEnvPlugin from "postcss-preset-env";
+
 const config = {
-	plugins: {
-		"postcss-preset-env": {
-			stage: 1,
-		},
-		cssnano: {
+	plugins: [
+		postCSSPresetEnvPlugin({
+			stage: 2,
+		}),
+		cssnanoPlugin({
 			preset: "default",
-		},
-	},
+		}),
+	],
 };
 
 export default config;

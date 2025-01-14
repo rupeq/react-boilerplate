@@ -3,4 +3,14 @@ pnpm-lock.json
 dist/
 .husky/
 .vitest-preview/
-test_results/
+test-results/
+playwright-report/
+.browserslistrc
+.dockerignore
+.editorconfig
+.gitignore
+.nvmrc
+.prettierignore
+.stylelintignore
+Dockerfile*
+*nginx*

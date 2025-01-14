@@ -5,7 +5,7 @@ import { initReactI18next } from "react-i18next";
 
 import { isProduction } from "@/common";
 
-import { defaultNS, fallbackLng, resources } from "./shared";
+import { defaultNS, fallbackLng } from "./shared";
 
 const i18nOptions: InitOptions<HttpBackendOptions> = {
 	defaultNS,
@@ -28,4 +28,5 @@ void i18n
 	.use(Backend)
 	.init<HttpBackendOptions>(i18nOptions);
 
-export { i18n, defaultNS, resources };
+export { resources, defaultNS } from "./shared";
+export { default as i18n } from "i18next";

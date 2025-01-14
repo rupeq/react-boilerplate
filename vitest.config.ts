@@ -1,4 +1,4 @@
-import { defineConfig, mergeConfig, type ConfigEnv } from "vitest/config";
+import { type ConfigEnv, defineConfig, mergeConfig } from "vitest/config";
 
 import viteConfig from "./vite.config";
 
@@ -13,6 +13,6 @@ export default (env: ConfigEnv) => {
 				globals: true,
 				exclude: ["node_modules"],
 			},
-		})
+		}),
 	);
 };
