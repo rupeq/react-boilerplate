@@ -14,7 +14,7 @@ COPY . .
 RUN pnpm run build
 
 # Stage 2
-FROM nginxinc/nginx-unprivileged:alpine-slim as production
+FROM nginxinc/nginx-unprivileged:alpine-slim AS production
 
 USER root
 

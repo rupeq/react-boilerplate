@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - 4000:80
+    env_file:
+      - .env
+    environment:
+      # OVERRIDE INTERNALS
+      - NODE_ENV=production
