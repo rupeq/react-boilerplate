@@ -291,6 +291,7 @@ eslintConfig.map((config) => {
 		"test-results/**/*",
 		"playwright-report/**/*",
 		".vitest-preview/**/*",
+		"src/routeTree.gen.ts",
 	];
 });
 

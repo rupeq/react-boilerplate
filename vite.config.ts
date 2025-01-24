@@ -1,7 +1,8 @@
 import path from "node:path";
 
+import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
-import { type ConfigEnv, defineConfig, normalizePath } from "vite";
+import { defineConfig, normalizePath, type ConfigEnv } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default (env: ConfigEnv) => {
@@ -10,6 +11,7 @@ export default (env: ConfigEnv) => {
 
 	return defineConfig({
 		plugins: [
+			process.env["NODE_ENV"] !== "test" && router(),
 			react(),
 			viteStaticCopy({
 				targets: [
