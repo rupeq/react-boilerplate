@@ -3,9 +3,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend, { type HttpBackendOptions } from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { isProduction } from "@/common";
-
-import { defaultNS, fallbackLng } from "./shared";
+import { isProduction } from "./environment";
+import { defaultNS, fallbackLng } from "./i18n-shared";
 
 const i18nOptions: InitOptions<HttpBackendOptions> = {
 	defaultNS,
@@ -28,5 +27,4 @@ void i18n
 	.use(Backend)
 	.init<HttpBackendOptions>(i18nOptions);
 
-export { resources, defaultNS } from "./shared";
 export { default as i18n } from "i18next";

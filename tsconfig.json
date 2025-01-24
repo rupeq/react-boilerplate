@@ -28,7 +28,16 @@
 
 		/* Alias */
 		"paths": {
-			"@/*": ["./src/*"]
+			"@assets/*": ["./src/assets/*"],
+			"@components/*": ["./src/components/*"],
+			"@features/*": ["./src/features/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@lib/*": ["./src/lib/*"],
+			"@routes/*": ["./src/routes/*"],
+			"@stores/*": ["./src/stores/*"],
+			"@testing/*": ["./src/testing/*"],
+			"@types/*": ["./src/types/*"],
+			"@utils/*": ["./src/utils/*"]
 		}
 	},
 	"include": ["src", "e2e"],

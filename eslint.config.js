@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import eslintJS from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
@@ -10,6 +13,35 @@ import eslintPluginReactRefresh from "eslint-plugin-react-refresh";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
+
+const featuresDir = path.join("src", "features");
+
+let features = [];
+
+try {
+	features = fs.readdirSync(featuresDir).filter((file) => {
+		const featurePath = path.join(featuresDir, file);
+		return fs.statSync(featurePath).isDirectory();
+	});
+} catch (error) {
+	console.error(`Error reading features directory at ${featuresDir}:`, error);
+	process.exit(1);
+}
+
+export const restrictedPaths = features.map((currentFeature) => {
+	const target = path.join(featuresDir, currentFeature, "**");
+
+	const restrictedFrom = features
+		.filter((feature) => feature !== currentFeature)
+		.map((feature) => path.join(featuresDir, feature, "**"));
+
+	return {
+		target: path.join("src", "features", currentFeature, "**"),
+		from: restrictedFrom,
+		message:
+			"Cross-feature imports are not allowed. Please import only within the same feature or from shared modules.",
+	};
+});
 
 const prettierConfig = {
 	...eslintConfigPrettier,
@@ -211,6 +243,31 @@ const importPlugin = {
 		...eslintPluginImport.flatConfigs.recommended.rules,
 		"import-x/no-cycle": "error",
 		"import-x/no-anonymous-default-export": "error",
+		"import-x/no-restricted-paths": [
+			"error",
+			{
+				zones: [
+					...restrictedPaths,
+					{
+						target: "./src/features",
+						from: "./src/routes",
+						message: "Features cannot be imported outside of routes folder.",
+					},
+					{
+						target: [
+							"./src/components",
+							"./src/hooks",
+							"./src/lib",
+							"./src/types",
+							"./src/utils",
+						],
+						from: ["./src/features", "./src/routes"],
+						message:
+							"Shared modules cannot be imported outside of features or routes folders.",
+					},
+				],
+			},
+		],
 	},
 };
 

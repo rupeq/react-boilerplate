@@ -1,4 +1,4 @@
-import { en, ru } from "@/assets/locales";
+import { en, ru } from "@assets/locales";
 
 export const defaultNS = "translations";
 export const fallbackLng = "en";

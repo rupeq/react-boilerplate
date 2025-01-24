@@ -1,22 +1,21 @@
-/* eslint-disable react-refresh/only-export-components */
 import { render as rtlRender } from "@testing-library/react";
-import { I18nextProvider } from "react-i18next";
+import type { ComponentType } from "react";
 
-import { init } from "@/i18n/tests";
+import {
+	DefaultWrapper,
+	I18nWrapper,
+	type WrapperType,
+} from "./render-wrappers";
 
-import type { RenderType, WrapperType } from "./types";
-
-export const defaults = {
+const defaults = {
 	withI18n: true,
 };
 
-const DefaultWrapper: WrapperType = ({ children }) => {
-	return <>{children}</>;
-};
-
-const I18nWrapper: WrapperType = ({ children }) => {
-	const i18n = init();
-	return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+export type RenderType<P> = {
+	ui: ComponentType<P>;
+	options?: Parameters<typeof rtlRender>[1];
+	parameters?: typeof defaults;
+	props?: P;
 };
 
 const render = <P extends object>({
@@ -39,13 +38,13 @@ const render = <P extends object>({
 	}
 
 	const Wrapper = wrappers.reduce(
-		(Accumulator, WrapperComponent, cid): WrapperType => {
+		(Accumulator, WrapperComponent): WrapperType => {
 			const wrapper: WrapperType = ({ children }) => (
 				<WrapperComponent>
 					<Accumulator>{children}</Accumulator>
 				</WrapperComponent>
 			);
-			wrapper.displayName = `__Wrapper__${cid}`;
+			wrapper.displayName = `${WrapperComponent.displayName}(${Accumulator.displayName})`;
 			return wrapper;
 		},
 		DefaultWrapper,

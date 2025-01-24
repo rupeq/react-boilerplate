@@ -30,7 +30,16 @@ export default (env: ConfigEnv) => {
 		},
 		resolve: {
 			alias: {
-				"@": path.resolve(__dirname, "./src"),
+				"@assets": path.resolve(__dirname, "./src/assets"),
+				"@components": path.resolve(__dirname, "./src/components"),
+				"@features": path.resolve(__dirname, "./src/features"),
+				"@hooks": path.resolve(__dirname, "./src/hooks"),
+				"@lib": path.resolve(__dirname, "./src/lib"),
+				"@routes": path.resolve(__dirname, "./src/routes"),
+				"@stores": path.resolve(__dirname, "./src/stores"),
+				"@testing": path.resolve(__dirname, "./src/testing"),
+				"@types": path.resolve(__dirname, "./src/types"),
+				"@utils": path.resolve(__dirname, "./src/utils"),
 			},
 		},
 		css: {
