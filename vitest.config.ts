@@ -1,4 +1,4 @@
-import { type ConfigEnv, defineConfig, mergeConfig } from "vitest/config";
+import { defineConfig, mergeConfig, type ConfigEnv } from "vitest/config";
 
 import viteConfig from "./vite.config";
 

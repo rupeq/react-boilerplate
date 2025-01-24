@@ -1,5 +1,5 @@
-import i18n, { type InitOptions, type i18n as i18nType } from "i18next";
 import { initReactI18next } from "react-i18next";
+import i18n, { type i18n as i18nType, type InitOptions } from "i18next";
 
 import { defaultNS, fallbackLng, resources } from "@utils/i18n-shared";
 

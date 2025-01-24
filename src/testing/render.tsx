@@ -1,5 +1,5 @@
-import { render as rtlRender } from "@testing-library/react";
 import type { ComponentType } from "react";
+import { render as rtlRender } from "@testing-library/react";
 
 import {
 	DefaultWrapper,
