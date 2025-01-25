@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 
 import { Router } from "./router";
 
-import "@assets/styles/normalize.css";
 import "@utils/i18n";
+import "./main.css";
 
 const rootElement = document.querySelector("#root");
 

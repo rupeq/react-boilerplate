@@ -3,7 +3,6 @@
 /** @type {import('stylelint').Config} */
 const config = {
 	extends: ["stylelint-prettier/recommended"],
-	customSyntax: "postcss-scss",
 	plugins: ["stylelint-order", "stylelint-scss"],
 	rules: {
 		"order/order": [

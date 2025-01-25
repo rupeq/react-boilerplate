@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, normalizePath, type ConfigEnv } from "vite";
@@ -11,6 +12,7 @@ export default (env: ConfigEnv) => {
 
 	return defineConfig({
 		plugins: [
+			tailwindcss(),
 			process.env["NODE_ENV"] !== "test" && router(),
 			react(),
 			viteStaticCopy({
@@ -45,7 +47,6 @@ export default (env: ConfigEnv) => {
 			},
 		},
 		css: {
-			postcss: path.resolve(__dirname, "./postcss.config.js"),
 			modules: {
 				localsConvention: "camelCase",
 				generateScopedName,
