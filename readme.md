@@ -1,6 +1,20 @@
 # React Boilerplate
 
-A starter template for rapidly developing React applications with Vite, TypeScript, testing (Vitest + Playwright), linting (ESLint + Stylelint + Prettier), and i18n support.
+A modern React boilerplate with TypeScript, Vite, TanStack Router, and Tailwind CSS v4, featuring production-ready configurations and development tools.
+
+## Features
+
+- ⚡️ React 19 with Vite 4
+- 🎨 Tailwind CSS 4
+- 🗺 TanStack Router v1 with File-based Routing
+- 🌐 i18n with React i18next
+- ✅ Testing: Vitest + Playwright + Testing Library
+- 🐋 Docker Development & Production Setup
+- 🔍 ESLint + Prettier + Stylelint
+- 🐺 Husky + Commitlint + Lint-staged
+- 🔒 Security Hardened Nginx Config
+- 📱 PWA-ready Configuration
+- 🧩 Modular Architecture
 
 ## Getting Started
 
@@ -37,7 +51,7 @@ pnpm install
 ```
 
 > **Note**: This boilerplate uses [pnpm](https://pnpm.io) as its preferred package manager.  
-> Required Node.js version is pinned in `.nvmrc` (22.12.0) and PNPM is pinned in `package.json`.
+> Required Node.js version is pinned in `.nvmrc` (22.0.0) and PNPM is pinned in `package.json`.
 
 ### 5. (Optional) Run Setup Script
 
@@ -50,6 +64,7 @@ This script will:
 - Re-initialize your Git repository
 - Set up Husky for Git hooks
 - Install necessary Playwright browsers
+- Generate TanStack routes
 
 **Congratulations!** You’re ready to start developing your new project.
 
@@ -71,48 +86,19 @@ Below is a summary of the key files and folders:
 
 ```
 .
-├── src
-│   ├── App.tsx
-│   ├── App.module.css
-│   ├── App.test.tsx
-│   ├── main.tsx
-│   ├── common
-│   │   ├── index.ts
-│   │   ├── tests.tsx
-│   │   ├── types.ts
-│   │   └── utils.ts
-│   ├── i18n
-│   │   ├── index.ts
-│   │   ├── shared.ts
-│   │   └── tests.ts
-│   ├── assets
-│   │   ├── locales
-│   │   │   ├── en/translations.json
-│   │   │   └── ru/translations.json
-│   │   └── styles
-│   │       └── normalize.css
-│   └── types
-│       ├── environment.d.ts
-│       ├── i18next.d.ts
-│       ├── reset.d.ts
-│       └── vite-env.d.ts
-├── .husky
-│   ├── commit-msg       (calls `pnpm commitizen`)
-│   └── pre-commit       (calls `pnpm lint-staged`)
-├── docker-compose.development.yml
-├── docker-compose.production.yml
-├── Dockerfile.development
-├── Dockerfile.production
-├── nginx.conf
-├── postcss.config.js
-├── prettier.config.js
-├── stylelint.config.js
-├── tsconfig.json
-├── tsconfig.node.json
-├── vite.config.ts
-├── vitest.config.ts
-├── vitest.setup.ts
-└── ...
+├── certs/               # HTTPS certs for production
+├── src/
+│   ├── assets/          # Static assets
+│   ├── components/      # Shared components
+│   ├── features/        # Feature modules
+│   ├── hooks/           # Custom hooks
+│   ├── lib/             # Third-party integrations
+│   ├── routes/          # Route definitions
+│   ├── stores/          # State management
+│   ├── testing/         # Test utilities
+│   ├── types/           # Type definitions
+│   └── utils/           # Utility functions
+├── e2e/                # Playwright tests
 ```
 
 ### Notable Configuration Files
@@ -124,6 +110,14 @@ Below is a summary of the key files and folders:
 - **`lint-staged.config.js`**: Defines the tasks run by lint-staged on Git pre-commit hooks.
 - **`.editorconfig`** / **`.browserlistrc`** / **`.nvmrc`**: Development environment, editor, and browser target configurations.
 - **Docker and Nginx**: Config files (`Dockerfile.*`, `nginx.conf`, `docker-compose.*`) for containerized development and production.
+
+### Code Quality
+
+- ESLint with strict TypeScript rules
+- Prettier with sorted imports
+- Stylelint with CSS/SCSS rules
+- Git hooks with Husky
+- Commit message validation
 
 ---
 
@@ -165,17 +159,6 @@ All scripts are defined in the **`package.json`** under the `"scripts"` key.
 - **`pnpm run test:e2e:report`**  
   Opens a Playwright test report in the browser.
 
-### Git Hooks & Commits
-
-This project comes with two hooks configured by [Husky](https://typicode.github.io/husky):
-
-1. **`pre-commit`**: Runs `pnpm lint-staged` to lint your staged files before committing.
-2. **`commit-msg`**: Runs `pnpm commitizen` to help create conventional commit messages.
-
-You can also use **`pnpm commit`** to trigger a guided commit prompt (powered by commitizen and commitlint).
-
-> If you wish to remove any hooks, simply delete the corresponding file in the `.husky` directory or remove Husky entirely.
-
 ---
 
 ## Using Docker
@@ -197,11 +180,11 @@ docker-compose -f docker-compose.development.yml up --build
 docker-compose -f docker-compose.production.yml up --build
 ```
 
-- Builds and runs an **nginx**-based Docker image to serve your compiled app at [http://localhost:4000](http://localhost:4000).
+- Builds and runs an **nginx**-based Docker image to serve your compiled app at [https://localhost](https://localhost).
 
 ### Frequently Used Commands
 
-- **`docker-compose down --volumes --remove-orphans --rmi all`**  
+- **`docker-compose -f docker-compose.production.yml down --volumes --remove-orphans --rmi all`**  
   Tears down all services, removing volumes, orphan containers, and images.
 - **`docker-compose -f docker-compose.development.yml up --build`**  
   Builds and starts the **development** service.

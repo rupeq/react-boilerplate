@@ -21,6 +21,12 @@ export default (env: ConfigEnv) => {
 						src: normalizePath(path.resolve(__dirname, "./src/assets/locales")),
 						dest: normalizePath(path.resolve(__dirname, "./dist")),
 					},
+					{
+						src: normalizePath(
+							path.resolve(__dirname, "./src/assets/icons/android-*.png"),
+						),
+						dest: normalizePath(path.resolve(__dirname, "./dist/assets")),
+					},
 				],
 			}),
 		],
@@ -55,6 +61,8 @@ export default (env: ConfigEnv) => {
 		build: {
 			minify: true,
 			cssCodeSplit: true,
+			outDir: "dist",
+			assetsDir: "assets",
 		},
 	});
 };
