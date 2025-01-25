@@ -4,9 +4,34 @@ services:
       context: .
       dockerfile: Dockerfile.production
     ports:
-      - 4000:80
+      - "443:443"
     env_file:
       - .env
     environment:
-      # OVERRIDE INTERNALS
       - NODE_ENV=production
+      - GENERATE_SOURCEMAP=false
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    networks:
+      - frontend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+
+networks:
+  frontend:
+    driver: bridge
+    attachable: true

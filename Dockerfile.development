@@ -1,29 +1,29 @@
-# Stage 1
-FROM node:20-slim AS base
+# Stage 1: Base
+FROM node:22-alpine AS base
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-COPY package.json pnpm-lock.yaml ./
-
+COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
-# Stage 2
+# Stage 2: Development
 FROM base AS development
 
-RUN apt-get update && \
-	apt-get install -y curl && \
-	rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl git openssh
 
-RUN useradd -m devuser
+ARG USER_ID=1001
+ARG GROUP_ID=1001
 
-COPY . .
-
-RUN mkdir /app/node_modules/.vite && \
+RUN addgroup -g $GROUP_ID devuser && \
+	adduser -D -u $USER_ID -G devuser devuser -s /bin/sh && \
+	mkdir -p /app/node_modules/.vite && \
 	chown -R devuser:devuser /app/node_modules/.vite
 
 USER devuser
+
+COPY --chown=devuser:devuser . .
 
 EXPOSE 3000
 

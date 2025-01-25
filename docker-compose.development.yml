@@ -3,8 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.development
+      args:
+        USER_ID: ${UID:-1001}
+        GROUP_ID: ${GID:-1001}
     ports:
-      - 3000:3000
+      - "3000:3000"
     networks:
       - app-network
     env_file:
@@ -12,6 +15,9 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
 
 networks:
   app-network:
