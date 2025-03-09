@@ -28,16 +28,7 @@
 
 		/* Alias */
 		"paths": {
-			"@assets/*": ["./src/assets/*"],
-			"@components/*": ["./src/components/*"],
-			"@features/*": ["./src/features/*"],
-			"@hooks/*": ["./src/hooks/*"],
-			"@lib/*": ["./src/lib/*"],
-			"@routes/*": ["./src/routes/*"],
-			"@stores/*": ["./src/stores/*"],
-			"@testing/*": ["./src/testing/*"],
-			"@types/*": ["./src/types/*"],
-			"@utils/*": ["./src/utils/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"include": ["src", "e2e"],

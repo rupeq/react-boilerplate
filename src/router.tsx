@@ -1,7 +1,7 @@
 import { Suspense, type JSX } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 
-import { RouterDevtools } from "@lib/devtools";
+import { RouterDevtools } from "@/lib/devtools";
 
 import { routeTree } from "./routeTree.gen";
 

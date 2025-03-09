@@ -1,6 +1,6 @@
 import { lazy } from "react";
 
-import { isProduction } from "@utils/environment";
+import { isProduction } from "@/utils/environment";
 
 export const RouterDevtools = isProduction
 	? (): null => null

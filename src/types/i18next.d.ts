@@ -1,4 +1,4 @@
-import type { defaultNS, resources } from "@utils/i18n-shared";
+import type { defaultNS, resources } from "@/utils/i18n-shared";
 
 declare module "i18next" {
 	interface CustomTypeOptions {

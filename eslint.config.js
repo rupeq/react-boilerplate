@@ -28,20 +28,22 @@ try {
 	process.exit(1);
 }
 
-export const restrictedPaths = features.map((currentFeature) => {
-	const target = path.join(featuresDir, currentFeature, "**");
+export const restrictedPaths = features
+	.map((currentFeature) => {
+		const target = path.join(featuresDir, currentFeature, "**");
 
-	const restrictedFrom = features
-		.filter((feature) => feature !== currentFeature)
-		.map((feature) => path.join(featuresDir, feature, "**"));
+		const restrictedFrom = features
+			.filter((feature) => feature !== currentFeature)
+			.map((feature) => path.join(featuresDir, feature, "**"));
 
-	return {
-		target: path.join("src", "features", currentFeature, "**"),
-		from: restrictedFrom,
-		message:
-			"Cross-feature imports are not allowed. Please import only within the same feature or from shared modules.",
-	};
-});
+		return {
+			target: path.join("src", "features", currentFeature, "**"),
+			from: restrictedFrom,
+			message:
+				"Cross-feature imports are not allowed. Please import only within the same feature or from shared modules.",
+		};
+	})
+	.filter((feature) => feature.from.length > 0);
 
 const prettierConfig = {
 	...eslintConfigPrettier,
